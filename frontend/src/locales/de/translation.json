@@ -1,0 +1,17 @@
+{
+  "title": "KI-gestützter Gesundheitsassistent",
+  "enter_symptoms": "Symptome eingeben:",
+  "predict": "Vorhersagen",
+  "prediction": "Vorhersage:",
+  "error": "Fehler:",
+  "best_candidates": "Beste Krankheitskandidaten (mehr Infos hinzufügen)",
+  "description": "Beschreibung:",
+  "medicines": "Medikamente:",
+  "symptom_overlap": "Symptomüberlappung:",
+  "missing_symptoms": "Fehlende Symptome:",
+  "extra_symptoms": "Zusätzliche Symptome (nicht in der Krankheit):",
+  "was_prediction_helpful": "War diese Vorhersage hilfreich?",
+  "yes": "Ja",
+  "no": "Nein",
+  "feedback_thank_you": "Vielen Dank für Ihr Feedback!"
+}

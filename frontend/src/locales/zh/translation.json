@@ -1,0 +1,17 @@
+{
+  "title": "AI驱动的健康助手",
+  "enter_symptoms": "输入症状：",
+  "predict": "预测",
+  "prediction": "预测：",
+  "error": "错误：",
+  "best_candidates": "最佳候选疾病（请补充更多信息）",
+  "description": "描述：",
+  "medicines": "药物：",
+  "symptom_overlap": "症状重叠：",
+  "missing_symptoms": "缺失症状：",
+  "extra_symptoms": "额外症状（不在疾病中）：",
+  "was_prediction_helpful": "这个预测有帮助吗？",
+  "yes": "是",
+  "no": "否",
+  "feedback_thank_you": "感谢您的反馈！"
+}

@@ -1,0 +1,17 @@
+{
+  "title": "Assistant de santé alimenté par l'IA",
+  "enter_symptoms": "Entrez les symptômes :",
+  "predict": "Prédire",
+  "prediction": "Prédiction :",
+  "error": "Erreur :",
+  "best_candidates": "Meilleures maladies candidates (ajoutez plus d'informations)",
+  "description": "Description :",
+  "medicines": "Médicaments :",
+  "symptom_overlap": "Chevauchement des symptômes :",
+  "missing_symptoms": "Symptômes manquants :",
+  "extra_symptoms": "Symptômes supplémentaires (non dans la maladie) :",
+  "was_prediction_helpful": "Cette prédiction était-elle utile ?",
+  "yes": "Oui",
+  "no": "Non",
+  "feedback_thank_you": "Merci pour votre retour !"
+}

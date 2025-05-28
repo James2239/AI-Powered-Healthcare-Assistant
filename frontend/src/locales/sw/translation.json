@@ -1,0 +1,17 @@
+{
+  "title": "Msaidizi wa Afya Anayeendeshwa na AI",
+  "enter_symptoms": "Weka Dalili:",
+  "predict": "Tabiri",
+  "prediction": "Utabiri:",
+  "error": "Hitilafu:",
+  "best_candidates": "Magonjwa Bora Yanayoweza Kutokea (Ongeza Maelezo Zaidi)",
+  "description": "Maelezo:",
+  "medicines": "Dawa:",
+  "symptom_overlap": "Mlingano wa Dalili:",
+  "missing_symptoms": "Dalili Zilizokosekana:",
+  "extra_symptoms": "Dalili za Ziada (sio kwenye ugonjwa):",
+  "was_prediction_helpful": "Je, utabiri huu ulikuwa wa msaada?",
+  "yes": "Ndio",
+  "no": "Hapana",
+  "feedback_thank_you": "Asante kwa maoni yako!"
+}

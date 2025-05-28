@@ -1,0 +1,17 @@
+{
+  "title": "Asistente de Salud Potenciado por IA",
+  "enter_symptoms": "Ingrese síntomas:",
+  "predict": "Predecir",
+  "prediction": "Predicción:",
+  "error": "Error:",
+  "best_candidates": "Mejores enfermedades candidatas (Agregue más información)",
+  "description": "Descripción:",
+  "medicines": "Medicamentos:",
+  "symptom_overlap": "Coincidencia de síntomas:",
+  "missing_symptoms": "Síntomas faltantes:",
+  "extra_symptoms": "Síntomas extra (no en la enfermedad):",
+  "was_prediction_helpful": "¿Fue útil esta predicción?",
+  "yes": "Sí",
+  "no": "No",
+  "feedback_thank_you": "¡Gracias por tu retroalimentación!"
+}
