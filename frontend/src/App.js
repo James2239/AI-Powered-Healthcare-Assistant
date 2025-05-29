@@ -2,6 +2,9 @@ import React, { useState, useEffect, useRef, createContext, useContext } from 'r
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 import './App.css';
+import AutoComplete from './components/AutoComplete';
+import SearchHistory from './components/SearchHistory';
+import './animations.css';
 
 // Theme context
 const ThemeContext = createContext();
@@ -69,6 +72,7 @@ function App() {
   });
   const [extractedSymptoms, setExtractedSymptoms] = useState([]);
   const [extractedExtraSymptoms, setExtractedExtraSymptoms] = useState([]);
+  const [searchHistory, setSearchHistory] = useState([]);
   const debounceTimeout = useRef(null);
   const debounceExtraTimeout = useRef(null);
 
@@ -190,18 +194,19 @@ function App() {
     extractedSymptoms.forEach(s => allSymptoms.add(s));
     extractedExtraSymptoms.forEach(s => allSymptoms.add(s));
     const uniqueSymptoms = Array.from(allSymptoms);
+    const symptomString = uniqueSymptoms.join(", ");
+    // Add to history (most recent first, no duplicates, max 10)
+    setSearchHistory(prev => [symptomString, ...prev.filter(q => q !== symptomString)].slice(0, 10));
     try {
       const response = await axios.post("http://127.0.0.1:8000/predict", {
-        symptoms: uniqueSymptoms.join(", "),
+        symptoms: symptomString,
         extra: ""
       });
       setLastResponse(response);
-      // Only update accumulatedSymptoms if user submitted more info
       setAccumulatedSymptoms(uniqueSymptoms);
       if (response.data.need_more_info && !response.data.predictions) {
         setNeedMoreInfo(true);
         setBackendMessage(response.data.message);
-        // Do NOT clear extra or tags here
         setPrediction(null);
         setMultiPredictions([]);
       } else if (response.data.predictions) {
@@ -212,7 +217,6 @@ function App() {
         setMedicines("");
         setConfidence(1.0);
         setSymptoms("");
-        // Do NOT clear extra or accumulatedSymptoms here
         setMultiPredictions(response.data.predictions);
       } else if (response.data.prediction) {
         setPrediction(response.data.prediction);
@@ -270,6 +274,16 @@ function App() {
     setSymptoms(updatedSymptoms);
   };
 
+  // Add to history after each submit (store symptoms string)
+  useEffect(() => {
+    if (prediction) {
+      setSearchHistory(prev => [prediction, ...prev.filter(p => p !== prediction)].slice(0, 10));
+    } else if (multiPredictions && multiPredictions.length > 0) {
+      const preds = multiPredictions.map(p => p.disease).join(', ');
+      setSearchHistory(prev => [preds, ...prev.filter(p => p !== preds)].slice(0, 10));
+    }
+  }, [prediction, multiPredictions]);
+
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
       <div className="App">
@@ -279,6 +293,7 @@ function App() {
             className="theme-toggle"
             onClick={toggleTheme}
             aria-label={theme === 'light' ? t('switch_to_dark') : t('switch_to_light')}
+            title={theme === 'light' ? t('switch_to_dark') : t('switch_to_light')}
           >
             {theme === 'light' ? '🌙' : '☀️'}
           </button>
@@ -333,8 +348,9 @@ function App() {
             borderRadius: 'var(--border-radius)',
             boxShadow: '0 2px 8px rgba(0,0,0,0.07)',
             padding: 24,
-            width: 350,
-            maxWidth: '90vw'
+            width: '100%',
+            maxWidth: 400,
+            minWidth: 0
           }}>
             <label style={{width: '100%', color: 'var(--text-primary)', fontWeight: 500}}>
               {t('enter_symptoms')}
@@ -348,20 +364,11 @@ function App() {
                 width: '100%',
                 border: '1px solid var(--text-secondary)'
               }}>
-                <input
-                  type="text"
+                <AutoComplete
                   value={symptoms}
-                  onChange={(e) => setSymptoms(e.target.value)}
+                  onChange={setSymptoms}
                   placeholder={t('symptoms_placeholder')}
-                  style={{
-                    width: '100%',
-                    background: 'transparent',
-                    border: 'none',
-                    color: 'var(--text-primary)',
-                    outline: 'none',
-                    fontSize: 14,
-                    padding: '8px 0'
-                  }}
+                  onSelect={s => setSymptoms(s)}
                 />
                 <button 
                   type="button" 
@@ -376,6 +383,7 @@ function App() {
                     display: 'flex',
                     alignItems: 'center'
                   }}
+                  aria-label={t('speak_symptoms')}
                 >
                   <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
                     <path 
@@ -426,10 +434,10 @@ function App() {
                     fontSize: 14
                   }}
                   autoFocus
+                  title={t('add_more_info')}
                 />
               </label>
             )}
-
             <div style={{display: 'flex', gap: 10, marginTop: 8}}>
               <button
                 type="submit"
@@ -445,16 +453,17 @@ function App() {
                   transition: 'all 0.2s ease',
                   transform: 'scale(1)',
                 }}
-                onMouseEnter={(e) => {
+                title={t('predict')}
+                onMouseEnter={e => {
                   e.currentTarget.style.transform = 'scale(1.05)';
                   e.currentTarget.style.background = 'var(--secondary-color)';
                 }}
-                onMouseLeave={(e) => {
+                onMouseLeave={e => {
                   e.currentTarget.style.transform = 'scale(1)';
                   e.currentTarget.style.background = 'var(--primary-color)';
                 }}
               >
-                {isLoading ? <Spinner /> : t('predict')}
+                {isLoading ? <span className="spinner fade-in" /> : t('predict')}
               </button>
               <button
                 type="button"
@@ -471,11 +480,12 @@ function App() {
                   transition: 'all 0.2s ease',
                   transform: 'scale(1)',
                 }}
-                onMouseEnter={(e) => {
+                title={t('reset')}
+                onMouseEnter={e => {
                   e.currentTarget.style.transform = 'scale(1.05)';
                   e.currentTarget.style.background = 'var(--text-secondary)';
                 }}
-                onMouseLeave={(e) => {
+                onMouseLeave={e => {
                   e.currentTarget.style.transform = 'scale(1)';
                   e.currentTarget.style.background = 'var(--background-secondary)';
                 }}
@@ -483,6 +493,12 @@ function App() {
                 {t('reset')}
               </button>
             </div>
+            {/* Search history below form */}
+            <SearchHistory
+              history={searchHistory}
+              onSelect={item => setSymptoms(item)}
+              onClear={() => setSearchHistory([])}
+            />
           </form>
 
           {/* Messages and Results */}
